@@ -1,23 +1,29 @@
 package Application;
 
+import db.DB;
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
-import java.time.LocalDate;
+import java.sql.Connection;
+import java.sql.Date;
+
 
 public class Program {
     static void main() {
 
-        LocalDate now = LocalDate.now();
+        Connection conn = DB.getConnection();
+
+
 
         Department obj = new Department(1, "Books");
 
-        Seller seller = new Seller(3100, "Felipe", "Braga@gmail.com",now, 3100.0, obj);
 
         SellerDao sellerDao = DaoFactory.createSellerDao();
 
-        System.out.println(seller);
+        sellerDao.delete(3100);
+
+
     }
 }
