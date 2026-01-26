@@ -20,10 +20,13 @@ public class Department implements Serializable {
         this.name = name;
     }
 
+    public Department(){
+
+    }
+
     @Override
     public String toString() {
-        return "Department " +
-                "Id -> " + Id +
+        return  "Id -> " + Id +
                 ", Name -> '" + name + '\'' +
                 ", Sellers -> " + Sellers +
                 '}';

@@ -17,12 +17,10 @@ public class Program {
 
 
 
-        Department obj = new Department(1, "Books");
-
 
         SellerDao sellerDao = DaoFactory.createSellerDao();
 
-        sellerDao.delete(3100);
+        System.out.println(sellerDao.findById(2));
 
 
     }
