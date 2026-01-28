@@ -7,21 +7,22 @@ import model.entities.Department;
 import model.entities.Seller;
 
 import java.sql.Connection;
-import java.sql.Date;
-
+import java.util.List;
 
 public class Program {
     static void main() {
 
         Connection conn = DB.getConnection();
 
-
-
-
         SellerDao sellerDao = DaoFactory.createSellerDao();
 
-        System.out.println(sellerDao.findById(2));
 
+        Department dep = new Department(2, null);
+
+        List<Seller> list = sellerDao.findByDepartment(dep);
+        for(Seller seller : list){
+            System.out.println(seller);
+        }
 
     }
 }

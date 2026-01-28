@@ -41,14 +41,14 @@ public class Seller implements Serializable {
 
     @Override
     public String toString() {
-        return "Vendedor [SELLER]\n" +
-                "ID -> " + id + "\n" +
-                "Name -> " + name + "\n" +
-                "Email -> " + email + "\n" +
-                "BirthDate -> " + birthDate + "\n" +
-                "BaseSalary -> " + baseSalary + "\n" +
-                "Department -> " + department;
+        return "Vendedor [SELLER] | ID=" + id +
+                " | Name=" + name +
+                " | Email=" + email +
+                " | BirthDate=" + birthDate +
+                " | BaseSalary=" + baseSalary +
+                " | Department=" + department;
     }
+
 
     public Integer getId() {
         return id;

@@ -26,11 +26,11 @@ public class Department implements Serializable {
 
     @Override
     public String toString() {
-        return  "Id -> " + Id +
-                ", Name -> '" + name + '\'' +
-                ", Sellers -> " + Sellers +
-                '}';
+        return "Department [ID=" + Id +
+                ", Name=" + name +
+                ", Sellers=" + Sellers + "]";
     }
+
 
     @Override
     public boolean equals(Object o) {
