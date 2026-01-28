@@ -16,12 +16,10 @@ public class Program {
 
         SellerDao sellerDao = DaoFactory.createSellerDao();
 
+        List<Seller> lista = sellerDao.findAll();
 
-        Department dep = new Department(2, null);
-
-        List<Seller> list = sellerDao.findByDepartment(dep);
-        for(Seller seller : list){
-            System.out.println(seller);
+        for(Seller a : lista){
+            System.out.println(a);
         }
 
     }
