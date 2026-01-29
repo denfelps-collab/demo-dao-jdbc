@@ -1,26 +1,26 @@
 package Application;
 
 import db.DB;
-import model.dao.DaoFactory;
+import model.dao.DaoFactorySeller;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
 import java.sql.Connection;
-import java.util.List;
+import java.sql.Date;
 
 public class Program {
     static void main() {
 
         Connection conn = DB.getConnection();
 
-        SellerDao sellerDao = DaoFactory.createSellerDao();
+        SellerDao sellerDao = DaoFactorySeller.createSellerDao();
 
-        List<Seller> lista = sellerDao.findAll();
+        Department depart = new Department(3,null);
 
-        for(Seller a : lista){
-            System.out.println(a);
-        }
+        Seller seller = new Seller(null, "Braga", "Braga@Gmail.com", new Date(15-10-2000),1000.0, depart);
+
+        sellerDao.insert(seller);
 
     }
 }

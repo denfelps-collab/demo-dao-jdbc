@@ -22,38 +22,77 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller obj) {
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = null;
             ps = conn.prepareStatement(
                     "INSERT INTO seller "
-                            + "(id,name,email,birthDate,baseSalary,departmentId) "
+                            + "(Name,Email,BirthDate,BaseSalary,DepartmentId) "
                             + "VALUES "
-                            + "(?,?,?,?,?,?) "
-            );
+                            + "(?,?,?,?,?) ",
+                    Statement.RETURN_GENERATED_KEYS);
 
 
-            ps.setInt(1, obj.getId());
-            ps.setString(2, obj.getName());
-            ps.setString(3, obj.getEmail());
-            ps.setDate(4, obj.getBrithDate());
-            ps.setDouble(5, obj.getBaseSalary());
-            ps.setInt(6, obj.getDepartment());
+            ps.setString(1, obj.getName());
+            ps.setString(2, obj.getEmail());
+            ps.setDate(3, obj.getBrithDate());
+            ps.setDouble(4, obj.getBaseSalary());
+            ps.setInt(5, obj.getDepartment());
 
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    obj.setId(id);
+                }
+                DB.closeResultSet(rs);
+
+            } else {
+                throw new DbException("Unexpected error! No rows affected! ");
+            }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
         }
     }
 
     @Override
     public void update(Seller obj) {
+
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(
+                    """
+                            UPDATE seller
+                            SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ?
+                            WHERE Id = ?
+                            """);
+
+            ps.setString(1, obj.getName());
+            ps.setString(2, obj.getEmail());
+            ps.setDate(3, obj.getBrithDate());
+            ps.setDouble(4, obj.getBaseSalary());
+            ps.setInt(5, obj.getDepartment());
+            ps.setInt(6, obj.getId());
+
+            ps.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
+
+        }
     }
+
 
     @Override
     public void delete(Integer id) {
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = null;
             ps = conn.prepareStatement(
                     "DELETE FROM seller "
                             + "WHERE id = (?)"
@@ -64,6 +103,8 @@ public class SellerDaoJDBC implements SellerDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DB.closeStatement(ps);
         }
 
     }
@@ -128,9 +169,9 @@ public class SellerDaoJDBC implements SellerDao {
         try {
             st = conn.prepareStatement(
                     " SELECT seller.*,department.Name as DepName " +
-                    "FROM seller INNER JOIN department " +
-                    "ON seller.DepartmentId = department.Id " +
-                    "ORDER BY Name"
+                            "FROM seller INNER JOIN department " +
+                            "ON seller.DepartmentId = department.Id " +
+                            "ORDER BY Name"
             );
 
             rs = st.executeQuery();
@@ -140,7 +181,7 @@ public class SellerDaoJDBC implements SellerDao {
 
             while (rs.next()) {
                 Department dep = map.get(rs.getInt("DepartmentId"));
-                if(dep == null){
+                if (dep == null) {
                     dep = instantiateDepartment(rs);
                     map.put(rs.getInt("DepartmentId"), dep);
 
@@ -185,7 +226,7 @@ public class SellerDaoJDBC implements SellerDao {
 
                 Department dep = map.get(rs.getInt("DepartmentId"));
 
-                if(dep == null){
+                if (dep == null) {
                     dep = instantiateDepartment(rs);
                     map.put(rs.getInt("DepartmentId"), dep);
 
@@ -204,7 +245,7 @@ public class SellerDaoJDBC implements SellerDao {
         }
 
     }
-    }
+}
 
 
 
